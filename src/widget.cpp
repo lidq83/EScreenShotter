@@ -29,7 +29,7 @@ void Widget::paintEvent(QPaintEvent *event)
 	Q_UNUSED(event)
 
 	QPainter painter(this);
-	painter.drawPixmap(QRect(0,0, originalPixmap.width(),originalPixmap.height()), originalPixmap);
+	painter.drawPixmap(QRect(0, 0, originalPixmap.width(), originalPixmap.height()), originalPixmap);
 	painter.drawPixmap(QRect(0, 0, pixmap->width(), pixmap->height()), *pixmap);
 }
 
@@ -91,8 +91,19 @@ void Widget::mouseReleaseEvent(QMouseEvent *event)
 	QScreen *screen = QGuiApplication::primaryScreen();
 	if (screen && rectShot.width() != 0 && rectShot.height() != 0)
 	{
-		QPixmap originalPixmap = screen->grabWindow(0, rectShot.x(), rectShot.y(), rectShot.width(), rectShot.height());
+		QRect rect = rectShot;
+		if (rectShot.width() < 0)
+		{
+			rect.setX(rectShot.x() + rectShot.width());
+			rect.setWidth(-rectShot.width());
+		}
+		if (rectShot.height() < 0)
+		{
+			rect.setY(rectShot.y() + rectShot.height());
+			rect.setWidth(-rectShot.height());
+		}
 
+		QPixmap pixmap = originalPixmap.copy(rect);
 		QDateTime current_date_time = QDateTime::currentDateTime();
 		QString current_date = current_date_time.toString("yyyy-MM-dd_hh-mm-ss-zzz");
 		QString path;
@@ -101,7 +112,8 @@ void Widget::mouseReleaseEvent(QMouseEvent *event)
 		path.append("_");
 		path.append(current_date);
 		path.append(".png");
-		originalPixmap.save(path);
+		pixmap.save(path);
+		editor.setPixmap(pixmap, path);
 	}
 
 	if (setting->editAfterShot)

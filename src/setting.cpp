@@ -2,7 +2,7 @@
 
 Setting::Setting(void)
 {
-	filePath = QString("~/Picures/");
+	filePath = QString("/home/lidq/Pictures/");
 	fileName = QString("EScreenShotter");
 
 	bgColorR = 64;
@@ -18,6 +18,8 @@ Setting::Setting(void)
 	editorRect.setHeight(800);
 
 	editorIsMax = true;
+
+	penWidth = 6;
 
 	QString path(QCoreApplication::applicationDirPath());
 	path.append("/setting.cfg");
@@ -43,6 +45,8 @@ void Setting::load(void)
 	editorIsMax = setting->value("editorIsMax", editorIsMax).toBool();
 
 	editorRect = setting->value("editorRect", editorRect).toRect();
+
+	penWidth = setting->value("penWidth", penWidth).toInt();
 }
 
 void Setting::save(void)
@@ -59,4 +63,6 @@ void Setting::save(void)
 	setting->setValue("editorIsMax", editorIsMax);
 
 	setting->setValue("editorRect", editorRect);
+
+	setting->setValue("penWidth", penWidth);
 }

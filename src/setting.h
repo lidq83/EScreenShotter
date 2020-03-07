@@ -25,6 +25,7 @@ public:
 	bool editAfterShot;
 	QRect editorRect;
 	bool editorIsMax;
+	int penWidth;
 
 private:
 	QSettings *setting;

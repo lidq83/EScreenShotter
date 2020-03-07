@@ -1,0 +1,11 @@
+<RCC>
+	<qresource prefix="/rc">
+		<file>images/icon_arrow.png</file>
+		<file>images/icon_ellipse.png</file>
+		<file>images/icon_line.png</file>
+		<file>images/icon_rect.png</file>
+		<file>images/icon_text.png</file>
+		<file>images/icon_draw.png</file>
+		<file>images/icon_color_custom.png</file>
+	</qresource>
+</RCC>
