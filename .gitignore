@@ -1,0 +1,14 @@
+release
+release/*
+.vscode
+.vscode/*
+.config
+.project
+.cproject
+.settings
+.settings/*
+.qmake.stash
+*.user
+ui
+ui/*
+Makefile
