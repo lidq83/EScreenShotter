@@ -35,6 +35,8 @@ public:
 	void setPixmap(QPixmap pixmap);
 	void savePixmap(QString filePath);
 
+	bool isModified(void);
+
 protected:
 	void paintEvent(QPaintEvent *event);
 	void mousePressEvent(QMouseEvent *event);
@@ -42,6 +44,7 @@ protected:
 	void mouseReleaseEvent(QMouseEvent *event);
 
 private:
+	bool modified;
 	QPixmap pixmap;
 	QRect rectTemp;
 	QPoint posStart;

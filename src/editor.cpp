@@ -223,11 +223,91 @@ void Editor::setPixmap(QPixmap pixmap, QString filePath)
 	{
 		return;
 	}
+
 	this->filePath = filePath;
 	ui->view->setPixmap(pixmap);
 }
 
+void Editor::slotActionOpen(void)
+{
+	filePath = QFileDialog::getOpenFileName(nullptr, "Open", setting->filePath, "PNG(*.png *.PNG *.jpg *.JPG)");
+	if (filePath.isEmpty())
+	{
+		return;
+	}
+
+	setting->filePath = filePath.mid(0, filePath.lastIndexOf("/") + 1);
+	setting->save();
+
+	QPixmap pixmap(filePath);
+	setPixmap(pixmap, filePath);
+}
+
 void Editor::slotActionSave(void)
 {
-	ui->view->savePixmap(this->filePath);
+	if (filePath == 0 || filePath.isEmpty())
+	{
+		filePath = QFileDialog::getSaveFileName(nullptr, "Save", setting->filePath, "PNG(*.png *.PNG)");
+		if (filePath.isEmpty())
+		{
+			return;
+		}
+	}
+
+	if (!filePath.endsWith(".png") && !filePath.endsWith(".PNG"))
+	{
+		filePath.append(".png");
+	}
+
+	setting->filePath = filePath.mid(0, filePath.lastIndexOf("/") + 1);
+	setting->save();
+
+	ui->view->savePixmap(filePath);
+}
+
+void Editor::slotActionSaveAs(void)
+{
+	filePath = QFileDialog::getSaveFileName(nullptr, "Save", filePath, "PNG(*.png *.PNG)");
+	if (filePath.isEmpty())
+	{
+		return;
+	}
+
+	if (!filePath.endsWith(".png") && !filePath.endsWith(".PNG"))
+	{
+		filePath.append(".png");
+	}
+
+	setting->filePath = filePath.mid(0, filePath.lastIndexOf("/") + 1);
+	setting->save();
+
+	ui->view->savePixmap(filePath);
+}
+
+void Editor::closeEvent(QCloseEvent *event)
+{
+	if (!ui->view->isModified())
+	{
+		event->accept();
+		return;
+	}
+
+	QMessageBox msgBox;
+	msgBox.setText("The document has been modified.");
+	msgBox.setInformativeText("Do you want to save your changes?");
+	msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+	msgBox.setDefaultButton(QMessageBox::Save);
+	int ret = msgBox.exec();
+	if (ret == (int)QMessageBox::Save)
+	{
+		slotActionSave();
+		event->accept();
+		return;
+	}
+	else if (ret == (int)QMessageBox::Discard)
+	{
+		event->accept();
+		return;
+	}
+	event->ignore();
 }

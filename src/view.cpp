@@ -5,7 +5,8 @@ extern Setting *setting;
 
 View::View(QWidget *parent)
 	: QWidget(parent),
-	  layerTemp(nullptr)
+	  layerTemp(nullptr),
+	  modified(false)
 {
 }
 
@@ -19,7 +20,15 @@ void View::setPixmap(QPixmap pixmap)
 	{
 		return;
 	}
+
+	for (int i = 0; i < layers.size(); i++)
+	{
+		delete layers.at(i);
+	}
+	layers.clear();
+
 	this->pixmap = pixmap;
+
 	this->setMinimumWidth(pixmap.width());
 	this->setMinimumHeight(pixmap.height());
 	this->setMaximumWidth(pixmap.width());
@@ -54,6 +63,7 @@ void View::paintEvent(QPaintEvent *event)
 
 void View::mousePressEvent(QMouseEvent *event)
 {
+	modified = true;
 	QColor color(setting->penColorR, setting->penColorG, setting->penColorB, setting->penColorA);
 	layerTemp = new Layer(setting->toolType, setting->penWidth, color);
 	posStart = event->pos();
@@ -100,17 +110,8 @@ void View::mouseReleaseEvent(QMouseEvent *event)
 
 void View::savePixmap(QString filePath)
 {
-	QString savePath = filePath;
-	if (savePath == 0)
-	{
-		savePath = QFileDialog::getSaveFileName(nullptr, "Save", savePath, "PNG(*.png *.PNG)");
-		if (savePath.isEmpty())
-		{
-			return;
-		}
-	}
-
 	QPixmap pixmapSave(pixmap.width(), pixmap.height());
+	pixmapSave.fill(QColor(0, 0, 0, 0));
 	QPainter painter(&pixmapSave);
 
 	painter.setRenderHint(QPainter::Antialiasing);
@@ -131,11 +132,13 @@ void View::savePixmap(QString filePath)
 	{
 		layerTemp->draw(&painter);
 	}
-	if (!savePath.endsWith(".png") && !savePath.endsWith(".PNG"))
-	{
-		savePath.append(".png");
-	}
-	pixmapSave.save(savePath);
 
-	qDebug() << savePath;
+	pixmapSave.save(filePath);
+	
+	modified = false;
+}
+
+bool View::isModified(void)
+{
+	return this->modified;
 }

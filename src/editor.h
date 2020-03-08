@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QPaintEvent>
+#include <QCloseEvent>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QIcon>
@@ -16,6 +17,7 @@
 #include <QPen>
 #include <QPoint>
 #include <QSpinBox>
+#include <QMessageBox>
 #include <QWheelEvent>
 #include <QFileDialog>
 #include <QList>
@@ -44,7 +46,12 @@ public:
 protected slots:
 	void slotToolChanged(QAction *action);
 	void slotColorChanged(QAction *action);
+	void slotActionOpen(void);
 	void slotActionSave(void);
+	void slotActionSaveAs(void);
+
+protected:
+	void closeEvent(QCloseEvent *event);
 
 private:
 	void initToolBar(void);

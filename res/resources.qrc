@@ -7,5 +7,8 @@
 		<file>images/icon_text.png</file>
 		<file>images/icon_draw.png</file>
 		<file>images/icon_color_custom.png</file>
+		<file>images/icon_open.png</file>
+		<file>images/icon_save.png</file>
+		<file>images/icon_save_as.png</file>
 	</qresource>
 </RCC>
