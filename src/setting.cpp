@@ -20,6 +20,7 @@ Setting::Setting(void)
 	editorIsMax = true;
 
 	penWidth = 6;
+	arrowLength = 23;
 
 	QString path(QCoreApplication::applicationDirPath());
 	path.append("/setting.cfg");
@@ -47,6 +48,7 @@ void Setting::load(void)
 	editorRect = setting->value("editorRect", editorRect).toRect();
 
 	penWidth = setting->value("penWidth", penWidth).toInt();
+	arrowLength = setting->value("arrowLength", arrowLength).toInt();
 }
 
 void Setting::save(void)
@@ -65,4 +67,5 @@ void Setting::save(void)
 	setting->setValue("editorRect", editorRect);
 
 	setting->setValue("penWidth", penWidth);
+	setting->setValue("arrowLength", arrowLength);
 }

@@ -1,6 +1,6 @@
-#include <math.h>
-#include <QDebug>
 #include "layer.h"
+
+extern Setting *setting;
 
 Layer::Layer(int type, int penWidth, QColor penColor)
 	: type(type),
@@ -106,18 +106,28 @@ void Layer::drawArrow(QPainter *painter)
 	float y = y2 - y1;
 
 	float r = sqrtf(x * x + y * y);
-	float cnt = 10;
-	float stepX = x / r;
-	float stepY = y / r;
+	float x0 = r;
+	float y0 = 0;
+	float angle = -getRotateAngle(x, y, x0, y0) * M_PI / 180.0;
 
-	painter->setBrush(penColor);
-	for (int i = 0; i < cnt; i++)
-	{
-		float cx = x2 - stepX * i * 4;
-		float cy = y2 - stepY * i * 4;
-		painter->drawEllipse(QPoint(cx, cy), i, i);
-	}
-	painter->setBrush(QColor(0, 0, 0, 0));
+	float linelen = setting->arrowLength;
+	float x4 = -linelen;
+	float y4 = -linelen / 2;
+	float x5 = -linelen;
+	float y5 = +linelen / 2;
+
+	float x6 = x4 * cosf(angle) - y4 * sinf(angle);
+	float y6 = x4 * sinf(angle) + y4 * cosf(angle);
+	float x7 = x5 * cosf(angle) - y5 * sinf(angle);
+	float y7 = x5 * sinf(angle) + y5 * cosf(angle);
+
+	x6 += x2;
+	y6 += y2;
+	x7 += x2;
+	y7 += y2;
+
+	painter->drawLine(x2, y2, x6, y6);
+	painter->drawLine(x2, y2, x7, y7);
 }
 
 void Layer::drawText(QPainter *painter)
@@ -137,4 +147,42 @@ void Layer::drawHand(QPainter *painter)
 	this->posPre = posEnd;
 
 	painter->drawPixmap(rect, *pixmap, rect);
+}
+
+float Layer::getRotateAngle(float x1, float y1, float x2, float y2)
+{
+	const float epsilon = 1.0e-6;
+	const float nyPI = acos(-1.0);
+	float dist = 0;
+	float dot = 0;
+	float degree = 0;
+	float angle = 0;
+
+	dist = sqrt(x1 * x1 + y1 * y1);
+	x1 /= dist;
+	y1 /= dist;
+	dist = sqrt(x2 * x2 + y2 * y2);
+	x2 /= dist;
+	y2 /= dist;
+	dot = x1 * x2 + y1 * y2;
+	if (fabs(dot - 1.0) <= epsilon)
+	{
+		angle = 0.0;
+	}
+	else if (fabs(dot + 1.0) <= epsilon)
+	{
+		angle = nyPI;
+	}
+	else
+	{
+		float cross = 0.0;
+		angle = acos(dot);
+		cross = x1 * y2 - x2 * y1;
+		if (cross < 0)
+		{
+			angle = 2 * nyPI - angle;
+		}
+	}
+	degree = angle * 180.0 / nyPI;
+	return degree;
 }

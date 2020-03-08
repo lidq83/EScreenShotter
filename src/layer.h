@@ -5,6 +5,9 @@
 #include <QRect>
 #include <QColor>
 #include <QPainter>
+#include <math.h>
+#include <QDebug>
+#include "setting.h"
 
 class Layer
 {
@@ -27,6 +30,7 @@ private:
 	void drawArrow(QPainter *painter);
 	void drawText(QPainter *painter);
 	void drawHand(QPainter *painter);
+	float getRotateAngle(float x1, float y1, float x2, float y2);
 
 private:
 	int type;

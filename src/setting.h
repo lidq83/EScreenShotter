@@ -26,6 +26,7 @@ public:
 	QRect editorRect;
 	bool editorIsMax;
 	int penWidth;
+	int arrowLength;
 
 private:
 	QSettings *setting;
