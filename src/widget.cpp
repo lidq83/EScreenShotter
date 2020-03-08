@@ -112,8 +112,8 @@ void Widget::mouseReleaseEvent(QMouseEvent *event)
 		path.append("_");
 		path.append(current_date);
 		path.append(".png");
-		pixmap.save(path);
-		editor.setPixmap(pixmap, path);
+		//pixmap.save(path);
+		editor.setPixmap(pixmap, 0);
 	}
 
 	if (setting->editAfterShot)

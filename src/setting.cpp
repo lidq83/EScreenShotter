@@ -10,6 +10,13 @@ Setting::Setting(void)
 	bgColorB = 128;
 	bgColorA = 128;
 
+	penColorR = 255;
+	penColorG = 0;
+	penColorB = 0;
+	penColorA = 255;
+
+	toolType = 0;
+
 	editAfterShot = true;
 
 	editorRect.setLeft(0);
@@ -42,6 +49,13 @@ void Setting::load(void)
 	bgColorB = setting->value("bgColorB", bgColorB).toInt();
 	bgColorA = setting->value("bgColorA", bgColorA).toInt();
 
+	penColorR = setting->value("penColorR", penColorR).toInt();
+	penColorG = setting->value("penColorG", penColorG).toInt();
+	penColorB = setting->value("penColorB", penColorB).toInt();
+	penColorA = setting->value("penColorA", penColorA).toInt();
+
+	toolType = setting->value("toolType", toolType).toInt();
+
 	editAfterShot = setting->value("editAfterShot", editAfterShot).toBool();
 	editorIsMax = setting->value("editorIsMax", editorIsMax).toBool();
 
@@ -60,6 +74,13 @@ void Setting::save(void)
 	setting->setValue("bgColorG", bgColorG);
 	setting->setValue("bgColorB", bgColorB);
 	setting->setValue("bgColorA", bgColorA);
+
+	setting->setValue("penColorR", penColorR);
+	setting->setValue("penColorG", penColorG);
+	setting->setValue("penColorB", penColorB);
+	setting->setValue("penColorA", penColorA);
+
+	setting->setValue("toolType", toolType);
 
 	setting->setValue("editAfterShot", editAfterShot);
 	setting->setValue("editorIsMax", editorIsMax);

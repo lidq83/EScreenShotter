@@ -9,8 +9,7 @@ Editor::Editor(QWidget *parent)
 	  toolsGroup(this),
 	  colorsGroup(this),
 	  currTool(nullptr),
-	  currColor(nullptr),
-	  layerTemp(nullptr)
+	  currColor(nullptr)
 {
 	ui->setupUi(this);
 	this->setGeometry(setting->editorRect);
@@ -117,6 +116,8 @@ void Editor::slotToolChanged(QAction *action)
 	{
 		toolType = 0;
 	}
+
+	setting->toolType = toolType;
 }
 
 void Editor::slotColorChanged(QAction *action)
@@ -155,113 +156,54 @@ void Editor::slotColorChanged(QAction *action)
 	{
 		colorType = 0;
 	}
-}
 
-void Editor::setPixmap(QPixmap pixmap, QString filePath)
-{
-	if (pixmap.width() <= 0 || pixmap.height() <= 0)
-	{
-		return;
-	}
-	this->filePath = filePath;
-	this->pixmap = pixmap;
-	this->update();
-}
-
-void Editor::paintEvent(QPaintEvent *event)
-{
-	Q_UNUSED(event)
-
-	QPainter painter(this);
-	painter.setRenderHint(QPainter::Antialiasing);
-
-	QRect rect;
-	rect.setX(0);
-	rect.setY(0);
-	rect.setWidth(pixmap.width());
-	rect.setHeight(pixmap.height());
-	painter.drawPixmap(rect, pixmap);
-
-	for (int i = 0; i < layers.size(); i++)
-	{
-		layers.at(i)->draw(&painter);
-	}
-
-	if (layerTemp != nullptr)
-	{
-		layerTemp->draw(&painter);
-	}
-}
-
-void Editor::mousePressEvent(QMouseEvent *event)
-{
-	layerTemp = new Layer(toolType, setting->penWidth, getToolColor());
-	posStart = event->pos();
-	posEnd = event->pos();
-	layerTemp->setPixmapSize(pixmap.size());
-	layerTemp->setPosStart(posStart);
-	layerTemp->setPosEnd(posEnd);
-	this->update();
-}
-
-void Editor::mouseMoveEvent(QMouseEvent *event)
-{
-	posEnd = event->pos();
-
-	int x = posEnd.x() < posStart.x() ? posEnd.x() : posStart.x();
-	int y = posEnd.y() < posStart.y() ? posEnd.y() : posStart.y();
-	int x1 = posEnd.x() > posStart.x() ? posEnd.x() : posStart.x();
-	int y1 = posEnd.y() > posStart.y() ? posEnd.y() : posStart.y();
-
-	rectTemp.setX(x);
-	rectTemp.setY(y);
-	rectTemp.setWidth(abs(x1 - x));
-	rectTemp.setHeight(abs(y1 - y));
-
-	layerTemp->setRect(rectTemp);
-	layerTemp->setPosStart(posStart);
-	layerTemp->setPosEnd(posEnd);
-
-	this->update();
-}
-
-void Editor::mouseReleaseEvent(QMouseEvent *event)
-{
-	Q_UNUSED(event)
-	if (layerTemp != nullptr)
-	{
-		layers.append(layerTemp);
-		layerTemp = nullptr;
-	}
-}
-
-QColor Editor::getToolColor(void)
-{
-	QColor penColor(255, 0, 0);
 	switch (colorType)
 	{
 	case 0:
-		penColor.setRgb(255, 0, 0);
+		setting->penColorR = 255;
+		setting->penColorG = 0;
+		setting->penColorB = 0;
+		setting->penColorA = 255;
 		break;
 
 	case 1:
-		penColor.setRgb(0, 255, 0);
+		setting->penColorR = 0;
+		setting->penColorG = 255;
+		setting->penColorB = 0;
+		setting->penColorA = 255;
+
 		break;
 
 	case 2:
-		penColor.setRgb(0, 0, 255);
+		setting->penColorR = 0;
+		setting->penColorG = 0;
+		setting->penColorB = 255;
+		setting->penColorA = 255;
+
 		break;
 
 	case 3:
-		penColor.setRgb(128, 128, 128);
+		setting->penColorR = 128;
+		setting->penColorG = 128;
+		setting->penColorB = 128;
+		setting->penColorA = 255;
+
 		break;
 
 	case 4:
-		penColor.setRgb(255, 255, 255);
+		setting->penColorR = 255;
+		setting->penColorG = 255;
+		setting->penColorB = 255;
+		setting->penColorA = 255;
+
 		break;
 
 	case 5:
-		penColor.setRgb(0, 0, 0);
+		setting->penColorR = 0;
+		setting->penColorG = 0;
+		setting->penColorB = 0;
+		setting->penColorA = 255;
+
 		break;
 
 	case 6:
@@ -272,42 +214,20 @@ QColor Editor::getToolColor(void)
 		break;
 	}
 
-	return penColor;
+	setting->save();
+}
+
+void Editor::setPixmap(QPixmap pixmap, QString filePath)
+{
+	if (pixmap.width() <= 0 || pixmap.height() <= 0)
+	{
+		return;
+	}
+	this->filePath = filePath;
+	ui->view->setPixmap(pixmap);
 }
 
 void Editor::slotActionSave(void)
 {
-	QString savePath = this->filePath;
-	if (savePath == 0)
-	{
-		savePath = QFileDialog::getSaveFileName(nullptr, "Save", this->filePath, "PNG(*.png *.PNG)");
-		if (savePath.isEmpty())
-		{
-			return;
-		}
-	}
-
-	QPixmap pixmapSave(pixmap.width(), pixmap.height());
-	QPainter painter(&pixmapSave);
-
-	painter.setRenderHint(QPainter::Antialiasing);
-
-	QRect rect;
-	rect.setX(0);
-	rect.setY(0);
-	rect.setWidth(pixmap.width());
-	rect.setHeight(pixmap.height());
-	painter.drawPixmap(rect, pixmap);
-
-	for (int i = 0; i < layers.size(); i++)
-	{
-		layers.at(i)->draw(&painter);
-	}
-
-	if (layerTemp != nullptr)
-	{
-		layerTemp->draw(&painter);
-	}
-
-	pixmapSave.save(savePath);
+	ui->view->savePixmap(this->filePath);
 }

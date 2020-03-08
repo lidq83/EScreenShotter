@@ -29,13 +29,15 @@ SOURCES += \
     src/widget.cpp \
 	src/setting.cpp \
 	src/editor.cpp \
-	src/layer.cpp
+	src/layer.cpp \
+	src/view.cpp
 
 HEADERS += \
     src/widget.h \
 	src/setting.h \
 	src/editor.h \
-	src/layer.cpp
+	src/layer.cpp \
+	src/view.h
 
 FORMS += \
     src/widget.ui \

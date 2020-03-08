@@ -9,7 +9,11 @@ Layer::Layer(int type, int penWidth, QColor penColor)
 	  rect(rect),
 	  posStart(-1, -1),
 	  posEnd(-1, -1),
-	  posPre(-1, -1)
+	  posPre(-1, -1),
+	  x_min(999999),
+	  y_min(999999),
+	  x_max(-999999),
+	  y_max(-999999)
 {
 }
 
@@ -20,8 +24,8 @@ Layer::~Layer()
 void Layer::setPixmapSize(QSize size)
 {
 	pixmap = new QPixmap(size);
-	painterPixmap = new QPainter(pixmap);
 	pixmap->fill(QColor(0, 0, 0, 0));
+	painterPixmap = new QPainter(pixmap);
 }
 
 void Layer::setRect(QRect rect)
@@ -32,11 +36,29 @@ void Layer::setRect(QRect rect)
 void Layer::setPosStart(QPoint posStart)
 {
 	this->posStart = posStart;
+
+	int x = posStart.x();
+	int y = posStart.y();
+
+	x_min = x_min > x ? x : x_min;
+	y_min = y_min > y ? y : y_min;
+
+	x_max = x_max < x ? x : x_max;
+	y_max = y_max < y ? y : y_max;
 }
 
 void Layer::setPosEnd(QPoint posEnd)
 {
 	this->posEnd = posEnd;
+
+	int x = posEnd.x();
+	int y = posEnd.y();
+
+	x_min = x_min > x ? x : x_min;
+	y_min = y_min > y ? y : y_min;
+
+	x_max = x_max < x ? x : x_max;
+	y_max = y_max < y ? y : y_max;
 }
 
 void Layer::draw(QPainter *painter)
@@ -146,7 +168,8 @@ void Layer::drawHand(QPainter *painter)
 	painterPixmap->drawLine(posPre, posEnd);
 	this->posPre = posEnd;
 
-	painter->drawPixmap(rect, *pixmap, rect);
+	QRect rectDraw(x_min - penWidth, y_min - penWidth, x_max - x_min + penWidth * 2, y_max - y_min + penWidth * 2);
+	painter->drawPixmap(rectDraw, *pixmap, rectDraw);
 }
 
 float Layer::getRotateAngle(float x1, float y1, float x2, float y2)

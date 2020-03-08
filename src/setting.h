@@ -22,6 +22,14 @@ public:
 	int bgColorG;
 	int bgColorB;
 	int bgColorA;
+
+	int penColorR;
+	int penColorG;
+	int penColorB;
+	int penColorA;
+
+	int toolType;
+
 	bool editAfterShot;
 	QRect editorRect;
 	bool editorIsMax;
