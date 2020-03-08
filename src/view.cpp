@@ -71,7 +71,7 @@ void View::mousePressEvent(QMouseEvent *event)
 	layerTemp->setPixmapSize(pixmap.size());
 	layerTemp->setPosStart(posStart);
 	layerTemp->setPosEnd(posEnd);
-	if (setting->toolType == 5)
+	if (setting->toolType == 4)
 	{
 		this->update();
 	}

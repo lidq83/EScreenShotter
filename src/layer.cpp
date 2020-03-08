@@ -6,7 +6,6 @@ Layer::Layer(int type, int penWidth, QColor penColor)
 	: type(type),
 	  penWidth(penWidth),
 	  penColor(penColor),
-	  rect(rect),
 	  posStart(-1, -1),
 	  posEnd(-1, -1),
 	  posPre(-1, -1),
@@ -78,9 +77,6 @@ void Layer::draw(QPainter *painter)
 		drawArrow(painter);
 		break;
 	case 4:
-		drawText(painter);
-		break;
-	case 5:
 		drawHand(painter);
 		break;
 	default:
@@ -150,10 +146,6 @@ void Layer::drawArrow(QPainter *painter)
 
 	painter->drawLine(x2, y2, x6, y6);
 	painter->drawLine(x2, y2, x7, y7);
-}
-
-void Layer::drawText(QPainter *painter)
-{
 }
 
 void Layer::drawHand(QPainter *painter)

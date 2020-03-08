@@ -110,7 +110,6 @@
    <addaction name="actionEllipse"/>
    <addaction name="actionLine"/>
    <addaction name="actionArrow"/>
-   <addaction name="actionText"/>
    <addaction name="actionDraw"/>
   </widget>
   <widget class="QToolBar" name="toolBarColor">
@@ -129,7 +128,6 @@
    <addaction name="actionColorGray"/>
    <addaction name="actionColorWhite"/>
    <addaction name="actionColorBlack"/>
-   <addaction name="actionColorCustom"/>
   </widget>
   <action name="actionRect">
    <property name="checkable">
@@ -192,21 +190,6 @@
    </property>
    <property name="text">
     <string>Draw</string>
-   </property>
-  </action>
-  <action name="actionText">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../res/resources.qrc">
-     <normaloff>:/rc/images/icon_text.png</normaloff>:/rc/images/icon_text.png</iconset>
-   </property>
-   <property name="text">
-    <string>Text</string>
-   </property>
-   <property name="toolTip">
-    <string>Text</string>
    </property>
   </action>
   <action name="actionColorBlack">
@@ -273,21 +256,6 @@
    </property>
    <property name="toolTip">
     <string>Blue</string>
-   </property>
-  </action>
-  <action name="actionColorCustom">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../res/resources.qrc">
-     <normaloff>:/rc/images/icon_color_custom.png</normaloff>:/rc/images/icon_color_custom.png</iconset>
-   </property>
-   <property name="text">
-    <string>ColorCustom</string>
-   </property>
-   <property name="toolTip">
-    <string>Custom</string>
    </property>
   </action>
   <action name="actionSave">

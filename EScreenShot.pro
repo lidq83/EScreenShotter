@@ -2,6 +2,14 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+
+CFLAGS				+=	-Wno-deprecated-copy
+CFLAGS				+=	-Wno-unused-parameter
+CFLAGS				+=	-Wno-reorder
+
+QMAKE_CXXFLAGS		+=	-std=c++11 $${CFLAGS}
+QMAKE_CFLAGS		+=	-std=gnu11 $${CFLAGS}
+
 CONFIG += c++11
 
 DESTDIR				+=	release

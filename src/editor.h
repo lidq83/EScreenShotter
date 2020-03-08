@@ -46,6 +46,7 @@ public:
 protected slots:
 	void slotToolChanged(QAction *action);
 	void slotColorChanged(QAction *action);
+	void slotPenWidthChanged(int width);
 	void slotActionOpen(void);
 	void slotActionSave(void);
 	void slotActionSaveAs(void);

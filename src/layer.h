@@ -28,7 +28,6 @@ private:
 	void drawEllipse(QPainter *painter);
 	void drawLine(QPainter *painter);
 	void drawArrow(QPainter *painter);
-	void drawText(QPainter *painter);
 	void drawHand(QPainter *painter);
 	float getRotateAngle(float x1, float y1, float x2, float y2);
 

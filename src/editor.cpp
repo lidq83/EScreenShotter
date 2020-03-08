@@ -49,7 +49,6 @@ void Editor::initToolBar(void)
 	toolsGroup.addAction(ui->actionEllipse);
 	toolsGroup.addAction(ui->actionLine);
 	toolsGroup.addAction(ui->actionArrow);
-	toolsGroup.addAction(ui->actionText);
 	toolsGroup.addAction(ui->actionDraw);
 
 	colorsGroup.addAction(ui->actionColorBlack);
@@ -58,10 +57,10 @@ void Editor::initToolBar(void)
 	colorsGroup.addAction(ui->actionColorRed);
 	colorsGroup.addAction(ui->actionColorGreen);
 	colorsGroup.addAction(ui->actionColorBlue);
-	colorsGroup.addAction(ui->actionColorCustom);
 
 	connect(&toolsGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotToolChanged(QAction *)));
 	connect(&colorsGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotColorChanged(QAction *)));
+	connect(spin, SIGNAL(valueChanged(int)), this, SLOT(slotPenWidthChanged(int)));
 
 	ui->actionRect->setChecked(true);
 	ui->actionColorRed->setChecked(true);
@@ -104,13 +103,9 @@ void Editor::slotToolChanged(QAction *action)
 	{
 		toolType = 3;
 	}
-	else if (action == ui->actionText)
-	{
-		toolType = 4;
-	}
 	else if (action == ui->actionDraw)
 	{
-		toolType = 5;
+		toolType = 4;
 	}
 	else
 	{
@@ -147,10 +142,6 @@ void Editor::slotColorChanged(QAction *action)
 	else if (action == ui->actionColorBlack)
 	{
 		colorType = 5;
-	}
-	else if (action == ui->actionColorCustom)
-	{
-		colorType = 6;
 	}
 	else
 	{
@@ -206,15 +197,16 @@ void Editor::slotColorChanged(QAction *action)
 
 		break;
 
-	case 6:
-		//custom color
-		break;
-
 	default:
 		break;
 	}
 
 	setting->save();
+}
+
+void Editor::slotPenWidthChanged(int width)
+{
+	setting->penWidth = width;
 }
 
 void Editor::setPixmap(QPixmap pixmap, QString filePath)
@@ -293,7 +285,7 @@ void Editor::closeEvent(QCloseEvent *event)
 	}
 
 	QMessageBox msgBox;
-	msgBox.setText("The document has been modified.");
+	msgBox.setText("The picture has been modified.");
 	msgBox.setInformativeText("Do you want to save your changes?");
 	msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 	msgBox.setDefaultButton(QMessageBox::Save);
