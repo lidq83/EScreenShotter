@@ -108,7 +108,6 @@ void View::mouseMoveEvent(QMouseEvent *event)
 	this->update();
 }
 
-
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
 	if (setting->toolType == 5)
@@ -186,7 +185,7 @@ void View::setText(QString text)
 	for (int i = 0; i < lines.size(); i++)
 	{
 		QString text = lines.at(i);
-		painterText.drawText(QRect(0, textLineHeight * i , textWidth * 2, textLineHeight), text, option);
+		painterText.drawText(QRect(0, textLineHeight * i, textWidth * 2, textLineHeight), text, option);
 	}
 
 	setting->toolType = 5;
