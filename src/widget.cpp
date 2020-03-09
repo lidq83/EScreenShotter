@@ -89,41 +89,69 @@ void Widget::paintEvent(QPaintEvent *event)
 
 void Widget::mousePressEvent(QMouseEvent *event)
 {
-	posStart = event->pos();
+	if (event->buttons() == Qt::LeftButton)
+	{
+		posStart = event->pos();
+	}
+	else if (event->buttons() == Qt::RightButton)
+	{
+		posStart.setX(0);
+		posStart.setY(0);
+		posEnd.setX(pixmap->width());
+		posEnd.setY(pixmap->height());
+		rectShot = twoPoints2Rect(posStart, posEnd);
+		QPainter painter(pixmap);
+		painter.setCompositionMode(QPainter::CompositionMode_Clear);
+		painter.fillRect(rectShot, Qt::transparent);
+		this->update();
+	}
 }
 
 void Widget::mouseMoveEvent(QMouseEvent *event)
 {
-	posEnd = event->pos();
+	if (event->buttons() == Qt::LeftButton)
+	{
+		posEnd = event->pos();
 
-	QColor color(setting->bgColorR, setting->bgColorG, setting->bgColorB, setting->bgColorA);
-	pixmap->fill(color);
+		QColor color(setting->bgColorR, setting->bgColorG, setting->bgColorB, setting->bgColorA);
+		pixmap->fill(color);
 
-	QPainter painter(pixmap);
+		QPainter painter(pixmap);
 
-	rectShot = twoPoints2Rect(posStart, posEnd);
+		rectShot = twoPoints2Rect(posStart, posEnd);
 
-	painter.setCompositionMode(QPainter::CompositionMode_Clear);
-	painter.fillRect(rectShot, Qt::transparent);
+		painter.setCompositionMode(QPainter::CompositionMode_Clear);
+		painter.fillRect(rectShot, Qt::transparent);
 
-	painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+		painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
 
-	QPen pen(QColor(255, 255, 255));
+		QPen pen(QColor(255, 255, 255));
 
-	int border1x = 1;
-	int border1y = 1;
-	int border2x = 2;
-	int border2y = 2;
+		int border1x = 1;
+		int border1y = 1;
+		int border2x = 2;
+		int border2y = 2;
 
-	pen.setWidth(border1x);
-	painter.setPen(pen);
-	painter.drawRect(QRect(rectShot.x() - border1x, rectShot.y() - border1y, rectShot.width() + border1x * 2, rectShot.height() + border1y * 2));
-	
-	pen.setColor(QColor(0, 0, 0));
-	pen.setWidth(border2x);
-	painter.setPen(pen);
-	painter.drawRect(QRect(rectShot.x() - border2x, rectShot.y() - border2y, rectShot.width() + border2x * 2, rectShot.height() + border2y * 2));
+		pen.setWidth(border1x);
+		painter.setPen(pen);
+		painter.drawRect(QRect(rectShot.x() - border1x, rectShot.y() - border1y, rectShot.width() + border1x * 2, rectShot.height() + border1y * 2));
 
+		pen.setColor(QColor(0, 0, 0));
+		pen.setWidth(border2x);
+		painter.setPen(pen);
+		painter.drawRect(QRect(rectShot.x() - border2x, rectShot.y() - border2y, rectShot.width() + border2x * 2, rectShot.height() + border2y * 2));
+	}
+	else if (event->buttons() == Qt::RightButton)
+	{
+		posStart.setX(0);
+		posStart.setY(0);
+		posEnd.setX(pixmap->width());
+		posEnd.setY(pixmap->height());
+		rectShot = twoPoints2Rect(posStart, posEnd);
+		QPainter painter(pixmap);
+		painter.setCompositionMode(QPainter::CompositionMode_Clear);
+		painter.fillRect(rectShot, Qt::transparent);
+	}
 	this->update();
 }
 
@@ -134,20 +162,7 @@ void Widget::mouseReleaseEvent(QMouseEvent *event)
 	QScreen *screen = QGuiApplication::primaryScreen();
 	if (screen && rectShot.width() != 0 && rectShot.height() != 0)
 	{
-		QRect rect = rectShot;
-		if (rectShot.width() < 0)
-		{
-			rect.setX(rectShot.x() + rectShot.width());
-			rect.setWidth(-rectShot.width());
-		}
-		if (rectShot.height() < 0)
-		{
-			rect.setY(rectShot.y() + rectShot.height());
-			rect.setWidth(-rectShot.height());
-		}
-
-		QPixmap pixmap = originalPixmap.copy(rect);
-
+		QPixmap pixmap = originalPixmap.copy(rectShot);
 		QDateTime current_date_time = QDateTime::currentDateTime();
 		QString current_date = current_date_time.toString("yyyy-MM-dd_hh-mm-ss-zzz");
 		QString path;
@@ -156,7 +171,6 @@ void Widget::mouseReleaseEvent(QMouseEvent *event)
 		path.append("_");
 		path.append(current_date);
 		path.append(".png");
-
 		editor.setPixmap(pixmap, path);
 		pixmap.save(path);
 	}
