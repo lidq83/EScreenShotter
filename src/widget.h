@@ -40,6 +40,9 @@ protected:
 	void keyReleaseEvent(QKeyEvent *event);
 
 private:
+	QRect twoPoints2Rect(QPoint p1, QPoint p2);
+
+private:
 	Ui::Widget *ui;
 	QPixmap originalPixmap;
 	QPixmap cursorRectPixmap;

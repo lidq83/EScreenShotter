@@ -101,7 +101,8 @@ void Widget::mouseMoveEvent(QMouseEvent *event)
 
 	QPainter painter(pixmap);
 
-	rectShot = QRect(posStart.x(), posStart.y(), posEnd.x() - posStart.x(), posEnd.y() - posStart.y());
+	rectShot = twoPoints2Rect(posStart, posEnd);
+
 	painter.setCompositionMode(QPainter::CompositionMode_Clear);
 	painter.fillRect(rectShot, Qt::transparent);
 
@@ -116,24 +117,12 @@ void Widget::mouseMoveEvent(QMouseEvent *event)
 
 	pen.setWidth(border1x);
 	painter.setPen(pen);
-
-	if (rectShot.width() < 0)
-	{
-		border1x = -border1x;
-		border2x = -border2x;
-	}
-	if (rectShot.height() < 0)
-	{
-		border1y = -border1y;
-		border2y = -border2y;
-	}
-
-	painter.drawRect(QRect(rectShot.x() - border1x, posStart.y() - border1y, rectShot.width() + border1x * 2, rectShot.height() + border1y * 2));
-
+	painter.drawRect(QRect(rectShot.x() - border1x, rectShot.y() - border1y, rectShot.width() + border1x * 2, rectShot.height() + border1y * 2));
+	
 	pen.setColor(QColor(0, 0, 0));
 	pen.setWidth(border2x);
 	painter.setPen(pen);
-	painter.drawRect(QRect(rectShot.x() - border2x, posStart.y() - border2y, rectShot.width() + border2x * 2, rectShot.height() + border2y * 2));
+	painter.drawRect(QRect(rectShot.x() - border2x, rectShot.y() - border2y, rectShot.width() + border2x * 2, rectShot.height() + border2y * 2));
 
 	this->update();
 }
@@ -158,6 +147,7 @@ void Widget::mouseReleaseEvent(QMouseEvent *event)
 		}
 
 		QPixmap pixmap = originalPixmap.copy(rect);
+
 		QDateTime current_date_time = QDateTime::currentDateTime();
 		QString current_date = current_date_time.toString("yyyy-MM-dd_hh-mm-ss-zzz");
 		QString path;
@@ -166,8 +156,9 @@ void Widget::mouseReleaseEvent(QMouseEvent *event)
 		path.append("_");
 		path.append(current_date);
 		path.append(".png");
-		pixmap.save(path);
+
 		editor.setPixmap(pixmap, path);
+		pixmap.save(path);
 	}
 
 	if (setting->editAfterShot)
@@ -198,4 +189,20 @@ void Widget::keyReleaseEvent(QKeyEvent *event)
 	{
 		QApplication::exit();
 	}
+}
+
+QRect Widget::twoPoints2Rect(QPoint p1, QPoint p2)
+{
+	int x1 = p1.x();
+	int y1 = p1.y();
+	int x2 = p2.x();
+	int y2 = p2.y();
+
+	int x3 = x1 < x2 ? x1 : x2;
+	int y3 = y1 < y2 ? y1 : y2;
+	int x4 = x1 > x2 ? x1 : x2;
+	int y4 = y1 > y2 ? y1 : y2;
+
+	QRect rect(x3, y3, x4 - x3, y4 - y3);
+	return rect;
 }
