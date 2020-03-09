@@ -108,6 +108,7 @@ void View::mouseMoveEvent(QMouseEvent *event)
 	this->update();
 }
 
+
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
 	if (setting->toolType == 5)
