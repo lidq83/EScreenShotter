@@ -31,7 +31,8 @@ SOURCES += \
 	src/layer.cpp \
 	src/view.cpp \
 	src/action.cpp \
-	src/undo_redo.cpp
+	src/undo_redo.cpp \
+	src/dialog_text.cpp
 
 HEADERS += \
     src/widget.h \
@@ -40,11 +41,13 @@ HEADERS += \
 	src/layer.cpp \
 	src/view.h \
 	src/action.h \
-	src/undo_redo.h
+	src/undo_redo.h \
+	src/dialog_text.h
 
 FORMS += \
     src/widget.ui \
-	src/editor.ui
+	src/editor.ui \
+	src/dialog_text.ui
 
 RESOURCES +=	res/resources.qrc
 

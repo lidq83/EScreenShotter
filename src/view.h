@@ -36,6 +36,8 @@ public:
 	void setPixmap(QPixmap pixmap);
 	void savePixmap(QString filePath);
 
+	void setText(QString text);
+
 	bool isModified(void);
 
 	void undo(void);
@@ -52,6 +54,7 @@ protected:
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
+	bool event(QEvent *event);
 
 private:
 	bool modified;

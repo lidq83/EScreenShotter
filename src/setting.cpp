@@ -29,6 +29,11 @@ Setting::Setting(void)
 	penWidth = 6;
 	arrowLength = 23;
 
+	textFont = QString("SimSun");
+	textSize = 16;
+	textItalic = false;
+	textBold = false;
+
 	QString path(QCoreApplication::applicationDirPath());
 	path.append("/setting.cfg");
 	setting = new QSettings(path, QSettings::IniFormat, 0);
@@ -63,6 +68,11 @@ void Setting::load(void)
 
 	penWidth = setting->value("penWidth", penWidth).toInt();
 	arrowLength = setting->value("arrowLength", arrowLength).toInt();
+
+	textFont = setting->value("textFont", textFont).toString();
+	textSize = setting->value("textSize", textSize).toInt();
+	textItalic = setting->value("textItalic", textItalic).toBool();
+	textBold = setting->value("textBold", textBold).toBool();
 }
 
 void Setting::save(void)
@@ -89,4 +99,9 @@ void Setting::save(void)
 
 	setting->setValue("penWidth", penWidth);
 	setting->setValue("arrowLength", arrowLength);
+
+	setting->setValue("textFont", textFont);
+	setting->setValue("textSize", textSize);
+	setting->setValue("textItalic", textItalic);
+	setting->setValue("textBold", textBold);
 }

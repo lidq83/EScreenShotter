@@ -20,6 +20,7 @@ public:
 	void setRect(QRect rect);
 	void setPosStart(QPoint posStart);
 	void setPosEnd(QPoint posEnd);
+	void setTextPixmap(QPixmap textPixmap);
 
 	void draw(QPainter *painter);
 
@@ -29,6 +30,8 @@ private:
 	void drawLine(QPainter *painter);
 	void drawArrow(QPainter *painter);
 	void drawHand(QPainter *painter);
+	void drawText(QPainter *painter);
+
 	float getRotateAngle(float x1, float y1, float x2, float y2);
 
 private:
@@ -41,7 +44,7 @@ private:
 	QPoint posPre;
 	QPixmap *pixmap;
 	QPainter *painterPixmap;
-
+	QPixmap textPixmap;
 	int x_min;
 	int y_min;
 	int x_max;

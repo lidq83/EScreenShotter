@@ -60,6 +60,7 @@ void Editor::initToolBar(void)
 
 	slotDoSomething();
 
+	connect(ui->actionText, SIGNAL(triggered()), this, SLOT(slotActionDrawText()));
 	connect(&toolsGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotToolChanged(QAction *)));
 	connect(&colorsGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotColorChanged(QAction *)));
 	connect(spin, SIGNAL(valueChanged(int)), this, SLOT(slotPenWidthChanged(int)));
@@ -221,6 +222,19 @@ void Editor::setPixmap(QPixmap pixmap, QString filePath)
 
 	this->filePath = filePath;
 	ui->view->setPixmap(pixmap);
+}
+
+void Editor::slotActionDrawText(void)
+{
+	DialogText dtext;
+	int ret = dtext.exec();
+	if (ret == 0)
+	{
+		return;
+	}
+
+	QString text = dtext.getText();
+	ui->view->setText(text);
 }
 
 void Editor::slotActionOpen(void)

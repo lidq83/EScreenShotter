@@ -25,6 +25,7 @@
 
 #include "setting.h"
 #include "layer.h"
+#include "dialog_text.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -53,6 +54,7 @@ protected slots:
 	void slotActionUndo(void);
 	void slotActionRedo(void);
 	void slotDoSomething(void);
+	void slotActionDrawText(void);
 
 protected:
 	void closeEvent(QCloseEvent *event);

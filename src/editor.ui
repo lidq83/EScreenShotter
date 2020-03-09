@@ -113,6 +113,7 @@
    <addaction name="actionLine"/>
    <addaction name="actionArrow"/>
    <addaction name="actionDraw"/>
+   <addaction name="actionText"/>
   </widget>
   <widget class="QToolBar" name="toolBarColor">
    <property name="windowTitle">
@@ -333,6 +334,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionText">
+   <property name="icon">
+    <iconset resource="../res/resources.qrc">
+     <normaloff>:/rc/images/icon_text.png</normaloff>:/rc/images/icon_text.png</iconset>
+   </property>
+   <property name="text">
+    <string>Text</string>
+   </property>
+   <property name="toolTip">
+    <string>Text</string>
    </property>
   </action>
  </widget>

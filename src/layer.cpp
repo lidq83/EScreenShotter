@@ -60,6 +60,11 @@ void Layer::setPosEnd(QPoint posEnd)
 	y_max = y_max < y ? y : y_max;
 }
 
+void Layer::setTextPixmap(QPixmap textPixmap)
+{
+	this->textPixmap = textPixmap;
+}
+
 void Layer::draw(QPainter *painter)
 {
 	switch (type)
@@ -78,6 +83,9 @@ void Layer::draw(QPainter *painter)
 		break;
 	case 4:
 		drawHand(painter);
+		break;
+	case 5:
+		drawText(painter);
 		break;
 	default:
 		break;
@@ -162,6 +170,12 @@ void Layer::drawHand(QPainter *painter)
 
 	QRect rectDraw(x_min - penWidth, y_min - penWidth, x_max - x_min + penWidth * 2, y_max - y_min + penWidth * 2);
 	painter->drawPixmap(rectDraw, *pixmap, rectDraw);
+}
+
+void Layer::drawText(QPainter *painter)
+{
+	QPoint pos(posStart.x() - textPixmap.width() / 2, posStart.y() - textPixmap.height() / 2);
+	painter->drawPixmap(pos, textPixmap);
 }
 
 float Layer::getRotateAngle(float x1, float y1, float x2, float y2)

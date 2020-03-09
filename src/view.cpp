@@ -63,6 +63,11 @@ void View::paintEvent(QPaintEvent *event)
 
 void View::mousePressEvent(QMouseEvent *event)
 {
+	if (setting->toolType == 5)
+	{
+		return;
+	}
+
 	modified = true;
 	QColor color(setting->penColorR, setting->penColorG, setting->penColorB, setting->penColorA);
 	layerTemp = new Layer(setting->toolType, setting->penWidth, color);
@@ -79,6 +84,11 @@ void View::mousePressEvent(QMouseEvent *event)
 
 void View::mouseMoveEvent(QMouseEvent *event)
 {
+	if (setting->toolType == 5)
+	{
+		return;
+	}
+
 	posEnd = event->pos();
 
 	int x = posEnd.x() < posStart.x() ? posEnd.x() : posStart.x();
@@ -100,7 +110,11 @@ void View::mouseMoveEvent(QMouseEvent *event)
 
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
-	Q_UNUSED(event)
+	if (setting->toolType == 5)
+	{
+		this->setAttribute(Qt::WA_Hover, false);
+	}
+
 	if (layerTemp != nullptr)
 	{
 		layers.append(layerTemp);
@@ -108,6 +122,83 @@ void View::mouseReleaseEvent(QMouseEvent *event)
 
 		undoredo.doSomething(&layers);
 		emit doSomething();
+	}
+}
+
+bool View::event(QEvent *event)
+{
+	if (event->type() == QEvent::HoverEnter)
+	{
+		QHoverEvent *e = (QHoverEvent *)event;
+		layerTemp->setPosStart(e->pos());
+		this->update();
+		return true;
+	}
+	else if (event->type() == QEvent::HoverMove)
+	{
+		QHoverEvent *e = (QHoverEvent *)event;
+		layerTemp->setPosStart(e->pos());
+		this->update();
+		return true;
+	}
+
+	return QWidget::event(event);
+}
+
+void View::setText(QString text)
+{
+	QColor color(setting->penColorR, setting->penColorG, setting->penColorB, setting->penColorA);
+
+	QFont font;
+	font.setFamily(setting->textFont);
+	font.setPointSize(setting->textSize);
+	font.setItalic(setting->textItalic);
+	font.setBold(setting->textBold);
+	QFontMetrics fontMetrics(font);
+
+	int textWidth = 0;
+	int textHeight = 0;
+	int textLineHeight = 0;
+
+	QStringList lines = text.split("\n");
+	for (int i = 0; i < lines.size(); i++)
+	{
+		QString text = lines.at(i);
+		int w = fontMetrics.width(text);
+		int h = fontMetrics.height();
+
+		textWidth = textWidth < w ? w : textWidth;
+		textLineHeight = textLineHeight < h ? h : textLineHeight;
+	}
+	textHeight = textLineHeight * lines.size();
+
+	QPixmap textPixmap(textWidth, textHeight);
+	textPixmap.fill(Qt::transparent);
+
+	QTextOption option(Qt::AlignLeft | Qt::AlignTop);
+	QPainter painterText(&textPixmap);
+	painterText.setRenderHint(QPainter::Antialiasing);
+	QPen pen(color);
+	painterText.setPen(pen);
+	painterText.setFont(font);
+
+	for (int i = 0; i < lines.size(); i++)
+	{
+		QString text = lines.at(i);
+		painterText.drawText(QRect(0, textLineHeight * i , textWidth * 2, textLineHeight), text, option);
+	}
+
+	setting->toolType = 5;
+	layerTemp = new Layer(setting->toolType, setting->penWidth, color);
+	layerTemp->setTextPixmap(textPixmap);
+	layerTemp->setPixmapSize(pixmap.size());
+	layerTemp->setPosStart(posStart);
+	layerTemp->setPosEnd(posEnd);
+	this->setAttribute(Qt::WA_Hover, true);
+
+	if (setting->toolType == 5)
+	{
+		this->update();
 	}
 }
 

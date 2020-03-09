@@ -6,8 +6,8 @@ extern Setting *setting;
 Widget::Widget(QWidget *parent)
 	: QWidget(parent),
 	  ui(new Ui::Widget),
-	  cursorSize(100),
-	  cursorOriginSize(20)
+	  cursorSize(180),
+	  cursorOriginSize(30)
 {
 	ui->setupUi(this);
 

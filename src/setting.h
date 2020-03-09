@@ -5,6 +5,7 @@
 #include <QString>
 #include <QColor>
 #include <QSettings>
+#include <QFont>
 #include <QCoreApplication>
 
 class Setting
@@ -35,6 +36,11 @@ public:
 	bool editorIsMax;
 	int penWidth;
 	int arrowLength;
+
+	QString textFont;
+	int textSize;
+	bool textItalic;
+	bool textBold;
 
 private:
 	QSettings *setting;
