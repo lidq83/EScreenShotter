@@ -50,6 +50,9 @@ protected slots:
 	void slotActionOpen(void);
 	void slotActionSave(void);
 	void slotActionSaveAs(void);
+	void slotActionUndo(void);
+	void slotActionRedo(void);
+	void slotDoSomething(void);
 
 protected:
 	void closeEvent(QCloseEvent *event);

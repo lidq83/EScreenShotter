@@ -95,6 +95,8 @@
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="actionSaveAs"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
   </widget>
   <widget class="QToolBar" name="toolBarTools">
    <property name="windowTitle">
@@ -303,6 +305,36 @@
     <string>Ctrl+O</string>
    </property>
   </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="../res/resources.qrc">
+     <normaloff>:/rc/images/icon_undo.png</normaloff>:/rc/images/icon_undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="../res/resources.qrc">
+     <normaloff>:/rc/images/icon_redo.png</normaloff>:/rc/images/icon_redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -364,10 +396,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionRedo</sender>
+   <signal>triggered()</signal>
+   <receiver>Editor</receiver>
+   <slot>slotActionRedo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionUndo</sender>
+   <signal>triggered()</signal>
+   <receiver>Editor</receiver>
+   <slot>slotActionUndo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slotActionSave()</slot>
   <slot>slotActionSaveAs()</slot>
   <slot>slotActionOpen()</slot>
+  <slot>slotActionUndo()</slot>
+  <slot>slotActionRedo()</slot>
  </slots>
 </ui>

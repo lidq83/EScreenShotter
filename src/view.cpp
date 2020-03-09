@@ -105,6 +105,9 @@ void View::mouseReleaseEvent(QMouseEvent *event)
 	{
 		layers.append(layerTemp);
 		layerTemp = nullptr;
+
+		undoredo.doSomething(&layers);
+		emit doSomething();
 	}
 }
 
@@ -134,11 +137,32 @@ void View::savePixmap(QString filePath)
 	}
 
 	pixmapSave.save(filePath);
-	
+
 	modified = false;
 }
 
 bool View::isModified(void)
 {
 	return this->modified;
+}
+
+void View::undo(void)
+{
+	undoredo.undo();
+	this->update();
+}
+void View::redo(void)
+{
+	undoredo.redo();
+	this->update();
+}
+
+bool View::canUndo(void)
+{
+	return undoredo.canUndo();
+}
+
+bool View::canRedo(void)
+{
+	return undoredo.canRedo();
 }

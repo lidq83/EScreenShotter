@@ -58,9 +58,12 @@ void Editor::initToolBar(void)
 	colorsGroup.addAction(ui->actionColorGreen);
 	colorsGroup.addAction(ui->actionColorBlue);
 
+	slotDoSomething();
+
 	connect(&toolsGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotToolChanged(QAction *)));
 	connect(&colorsGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotColorChanged(QAction *)));
 	connect(spin, SIGNAL(valueChanged(int)), this, SLOT(slotPenWidthChanged(int)));
+	connect(ui->view, SIGNAL(doSomething()), this, SLOT(slotDoSomething()));
 
 	ui->actionRect->setChecked(true);
 	ui->actionColorRed->setChecked(true);
@@ -274,6 +277,38 @@ void Editor::slotActionSaveAs(void)
 	setting->save();
 
 	ui->view->savePixmap(filePath);
+}
+
+void Editor::slotActionUndo(void)
+{
+	ui->view->undo();
+	slotDoSomething();
+}
+
+void Editor::slotActionRedo(void)
+{
+	ui->view->redo();
+	slotDoSomething();
+}
+
+void Editor::slotDoSomething(void)
+{
+	if (ui->view->canUndo())
+	{
+		ui->actionUndo->setEnabled(true);
+	}
+	else
+	{
+		ui->actionUndo->setEnabled(false);
+	}
+	if (ui->view->canRedo())
+	{
+		ui->actionRedo->setEnabled(true);
+	}
+	else
+	{
+		ui->actionRedo->setEnabled(false);
+	}
 }
 
 void Editor::closeEvent(QCloseEvent *event)

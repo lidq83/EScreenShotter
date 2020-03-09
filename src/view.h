@@ -23,6 +23,7 @@
 
 #include "setting.h"
 #include "layer.h"
+#include "undo_redo.h"
 
 class View : public QWidget
 {
@@ -36,6 +37,15 @@ public:
 	void savePixmap(QString filePath);
 
 	bool isModified(void);
+
+	void undo(void);
+	void redo(void);
+
+	bool canUndo(void);
+	bool canRedo(void);
+
+signals:
+	void doSomething(void);
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -51,5 +61,6 @@ private:
 	QPoint posEnd;
 	Layer *layerTemp;
 	QList<Layer *> layers;
+	UndoRedo undoredo;
 };
 #endif // WIDGET_H

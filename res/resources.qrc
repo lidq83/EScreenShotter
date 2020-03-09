@@ -10,5 +10,7 @@
 		<file>images/icon_open.png</file>
 		<file>images/icon_save.png</file>
 		<file>images/icon_save_as.png</file>
+		<file>images/icon_undo.png</file>
+		<file>images/icon_redo.png</file>
 	</qresource>
 </RCC>
